@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "333958402667",
+    "firebase_url": "https://ecomrs-app-default-rtdb.firebaseio.com",
+    "project_id": "ecomrs-app",
+    "storage_bucket": "ecomrs-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333958402667:android:78a4d2365bdf7a2a19572e",
+        "android_client_info": {
+          "package_name": "com.example.ecomrs_app_part1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333958402667-hbglrqo3qjpf1tjbe83c4mhivctupjc2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9827jrtAfmHWiMHWaJiFrL_Y4fOh6oD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333958402667-hbglrqo3qjpf1tjbe83c4mhivctupjc2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
