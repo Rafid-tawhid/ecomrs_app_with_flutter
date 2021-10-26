@@ -2,6 +2,7 @@ import 'package:ecomrs_app_part1/pages/dashboard_page.dart';
 import 'package:ecomrs_app_part1/pages/launcher_page.dart';
 import 'package:ecomrs_app_part1/pages/loginPage.dart';
 import 'package:ecomrs_app_part1/pages/new_product.dart';
+import 'package:ecomrs_app_part1/pages/product_list_page.dart';
 import 'package:ecomrs_app_part1/provider/product_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
           LauncherPage.routeName: (context) =>LauncherPage(),
           LoginPage.routeName: (context) =>LoginPage(),
           Dashboard.routeName: (context) =>Dashboard(),
-          NewProductPage.routeName: (context) =>NewProductPage()
+          NewProductPage.routeName: (context) =>NewProductPage(),
+          ProductListPage.routeName: (context) =>ProductListPage()
         },
       ),
     );
