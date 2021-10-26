@@ -1,8 +1,10 @@
 import 'package:ecomrs_app_part1/auth/firebase_auth.dart';
 import 'package:ecomrs_app_part1/pages/loginPage.dart';
 import 'package:ecomrs_app_part1/pages/new_product.dart';
+import 'package:ecomrs_app_part1/provider/product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   static const String routeName='/dashboard_page';
@@ -12,6 +14,15 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  late ProductProvider _productProvider;
+
+  @override
+  void didChangeDependencies() {
+    _productProvider=Provider.of<ProductProvider>(context,listen: false);
+    _productProvider.getAllCategories();
+
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
