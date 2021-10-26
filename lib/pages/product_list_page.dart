@@ -1,6 +1,7 @@
 
 
 
+import 'dart:io';
 import 'package:ecomrs_app_part1/models/product_model.dart';
 import 'package:ecomrs_app_part1/provider/product_provider.dart';
 import 'package:ecomrs_app_part1/utilities/constant.dart';
@@ -8,8 +9,6 @@ import 'package:ecomrs_app_part1/utilities/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
-
 class ProductListPage extends StatefulWidget {
   static const String routeName='/products';
   @override
@@ -40,12 +39,14 @@ class _ProductListPageState extends State<ProductListPage> {
           return Card(
             elevation: 3,
             child: ListTile(
+              leading: Image.file(File(product.localImagePath!),fit: BoxFit.cover,height: 100,width: 100,),
                title: Text(product.name!),
+              subtitle: Text(product.description!),
               trailing: Chip(
                 label: Text('$taka ${product.price}'),
               ),
               
-
+              
             ),
           );
         },
