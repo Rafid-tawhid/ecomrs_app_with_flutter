@@ -7,6 +7,7 @@ class ProductModel{
   String? catagory;
   num? price;
   String? localImagePath;
+  String? imageName;
   String? downloadImageUrl;
   String? description;
   int stock;
@@ -23,7 +24,8 @@ class ProductModel{
     this.description,
     this.stock=1,
     this.isAvailable=true,
-    this.purchaseDate }
+    this.purchaseDate,
+    this.imageName}
 );
 
   Map<String,dynamic> toMap(){
@@ -33,6 +35,7 @@ class ProductModel{
       'catagory':catagory,
       'price':price,
       'localImgPath':localImagePath,
+      'imageName':imageName,
       'downloadImageUrl':downloadImageUrl,
       'description':description,
       'stock':stock,
@@ -49,7 +52,8 @@ class ProductModel{
   id:map['id'],
   name:map['name'],
   catagory:map['catagory'],
-  localImagePath:map['localImagePath'],
+  localImagePath:map['localImgPath'],
+    imageName:map['imageName'],
   downloadImageUrl:map['downloadImageUrl'],
   description:map['description'],
   stock:map['stock'],
@@ -60,6 +64,6 @@ class ProductModel{
 
   @override
   String toString() {
-    return 'ProductModel{id: $id, name: $name, catagory: $catagory, price: $price, localImagePath: $localImagePath, downloadImageUrl: $downloadImageUrl, description: $description, stock: $stock, isAvailable: $isAvailable, purchaseDate: $purchaseDate}';
+    return 'ProductModel{id: $id, name: $name, catagory: $catagory, price: $price, localImagePath: $localImagePath, imageName: $imageName, downloadImageUrl: $downloadImageUrl, description: $description, stock: $stock, isAvailable: $isAvailable, purchaseDate: $purchaseDate}';
   }
 }

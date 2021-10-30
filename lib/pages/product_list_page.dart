@@ -41,7 +41,8 @@ class _ProductListPageState extends State<ProductListPage> {
               Card(
                 elevation: 3,
                 child: ListTile(
-                  // leading: Image.file(File(product.localImagePath!),fit: BoxFit.cover,height: 100,width: 100,),
+                  leading: fadedImageWidget(product.downloadImageUrl!),
+                  // leading: Image.network(product.downloadImageUrl!,fit: BoxFit.cover,height: 100,width: 100,),
                    title: Text(product.name!),
                   subtitle: Text(product.description!),
                   trailing: Chip(
@@ -57,6 +58,15 @@ class _ProductListPageState extends State<ProductListPage> {
         },
       ),
     );
+
+
+  }
+
+  Widget fadedImageWidget(String url){
+
+    return FadeInImage.assetNetwork(placeholder: 'images/ph1.png', image: url,
+    fadeInDuration: Duration(seconds: 3),
+    fadeInCurve: Curves.bounceIn,fit: BoxFit.cover,);
   }
 
 

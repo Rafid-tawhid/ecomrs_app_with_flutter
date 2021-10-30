@@ -1,4 +1,5 @@
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,6 +27,7 @@ class _NewProductPageState extends State<NewProductPage> {
   ProductModel _productModel=ProductModel();
   ImageSource _imageSource=ImageSource.camera;
   String? _imgPath;
+  bool isSaving=false;
 
   late ProductProvider _productProvider;
 
@@ -54,159 +56,192 @@ class _NewProductPageState extends State<NewProductPage> {
               IconButton(onPressed: _saveProduct, icon: Icon(Icons.save)),
             ],
           ),
-          body: Form(
-            key: _form_key,
-            child: ListView(padding: EdgeInsets.all(12), children: [
-              TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                    return 'This field must not be empty';
-                  return null;
-                },
-                onSaved: (value) {
-                  _productModel.name=value;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Product Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                    return 'This field must not be empty';
-                  return null;
-                },
-                onSaved: (value) {
-                  _productModel.description=value;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Product Description',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                    return 'This field must not be empty';
-                  return null;
-                },
-                onSaved: (value) {
-                  _productModel.price=int.parse(value!);
-                },
-                decoration: InputDecoration(
-                  labelText: 'Product Price',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                    return 'This field must not be empty';
-                  return null;
-                },
-                onSaved: (value) {
-                  _productModel.stock=int.parse(value!);
-                },
-                decoration: InputDecoration(
-                  labelText: 'Quantity',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              DropdownButtonFormField(
-                hint: Text("Select Categories"),
-                value: _category,
-                onChanged: (value) {
+          body: Stack(
 
-                  setState(() {
-                    _category = value as String?;
-                  });
-                  _productModel.catagory=value as String?;
-                },
-                items: _productProvider.categorieList
-                    .map((e) => DropdownMenuItem(
-                          child: Text(e),
-                          value: e,
-                        ))
-                    .toList(),
-                validator: (value) {
-                  if (value == null)
-                    {return 'Please Select a Category';}
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Card(
-
-                elevation: 5,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton.icon(onPressed: _showDatePicker,icon: Icon(Icons.date_range_outlined),label: Text("Select Date"),),
-                    Text(_dateTime==null? 'No Date Chosen' : getFormatedDate(_dateTime!,'MMM dd yyyy'))
-
-                  ],
-                ),
-              ),
-              SizedBox(height: 10,),
-              Card(
-                elevation: 5,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 200,
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                        // borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: Colors.grey,width: 2),
-                      ),
-                      child: _imgPath==null ?Image.asset('images/ph1.png'):Image.file(File(_imgPath!),fit: BoxFit.cover,),
+            children: [
+              if(isSaving)Center(child: CircularProgressIndicator(),),
+              Form(
+                key: _form_key,
+                child: ListView(padding: EdgeInsets.all(12), children: [
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty)
+                        return 'This field must not be empty';
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _productModel.name=value;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Product Name',
+                      border: OutlineInputBorder(),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty)
+                        return 'This field must not be empty';
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _productModel.description=value;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Product Description',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty)
+                        return 'This field must not be empty';
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _productModel.price=int.parse(value!);
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Product Price',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty)
+                        return 'This field must not be empty';
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _productModel.stock=int.parse(value!);
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Quantity',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  DropdownButtonFormField(
+                    hint: Text("Select Categories"),
+                    value: _category,
+                    onChanged: (value) {
+
+                      setState(() {
+                        _category = value as String?;
+                      });
+                      _productModel.catagory=value as String?;
+                    },
+                    items: _productProvider.categorieList
+                        .map((e) => DropdownMenuItem(
+                              child: Text(e),
+                              value: e,
+                            ))
+                        .toList(),
+                    validator: (value) {
+                      if (value == null)
+                        {return 'Please Select a Category';}
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Card(
+
+                    elevation: 5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ElevatedButton(onPressed: (){
-                          _imageSource=ImageSource.camera;
-                          _pickImage();
-                        }, child: Text("Camera")),
-                        SizedBox(width: 10,),
-                        ElevatedButton(onPressed: (){
-                          _imageSource=ImageSource.gallery;
-                          _pickImage();
-                        }, child: Text("Gallery")),
+                        ElevatedButton.icon(onPressed: _showDatePicker,icon: Icon(Icons.date_range_outlined),label: Text("Select Date"),),
+                        Text(_dateTime==null? 'No Date Chosen' : getFormatedDate(_dateTime!,'MMM dd yyyy'))
+
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 10,),
+                  Card(
+                    elevation: 5,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 200,
+                          width: double.maxFinite,
+                          decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: Colors.grey,width: 2),
+                          ),
+                          child: _imgPath==null ?Image.asset('images/ph1.png'):Image.file(File(_imgPath!),fit: BoxFit.cover,),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(onPressed: (){
+                              _imageSource=ImageSource.camera;
+                              _pickImage();
+                            }, child: Text("Camera")),
+                            SizedBox(width: 10,),
+                            ElevatedButton(onPressed: (){
+                              _imageSource=ImageSource.gallery;
+                              _pickImage();
+                            }, child: Text("Gallery")),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
               ),
-            ]),
+            ],
           ),
         ));
   }
 
-  void _saveProduct() {
-    if(_form_key.currentState!.validate())
+  Future<void> _saveProduct() async {
+    final bool isConnected=await isConnectesToInternet();
+    if(isConnected){
+
+      if(_form_key.currentState!.validate())
       {
         _form_key.currentState!.save();
+        if(_dateTime==null){
+          showMessage(context, 'Select a Date');
+          return;
+        }
+        if(_imgPath==null){
+          showMessage(context, 'Select an Image');
+          return;
+        }
+
+        setState(() {
+          isSaving=true;
+        });
         print(_productModel);
-        _productProvider.insertNewProduct(_productModel).then((_) => Navigator.pop(context));
+         _uploadImageAndSaveProduct();
+
       }
+    }
+    else
+      {
+        showMessage(context, 'No Internet Connection');
+        print(" No Internet");
+        final snackBar = SnackBar(content: Text('No Internet Connection'));
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }
+
   }
 
   void _showDatePicker() async{
@@ -220,7 +255,7 @@ class _NewProductPageState extends State<NewProductPage> {
       }
   }
   void _pickImage() async {
-    final pickedFile=await ImagePicker().pickImage(source: _imageSource);
+    final pickedFile=await ImagePicker().pickImage(source: _imageSource,imageQuality: 60);
 
     if(pickedFile!=null)
       {
@@ -229,6 +264,38 @@ class _NewProductPageState extends State<NewProductPage> {
         });
         _productModel.localImagePath=_imgPath;
       }
+
+  }
+
+  void _uploadImageAndSaveProduct() async{
+    final uploadFile=File(_imgPath!);
+    final imageName='Product_${DateTime.now()}';
+    final photoRef=FirebaseStorage.instance.ref().child('photoDerectory/$imageName');
+    try{
+
+      final uploadTask=photoRef.putFile(uploadFile);
+      final snapshot=await uploadTask.whenComplete(() => {
+
+      });
+      final dlUrl=await snapshot.ref.getDownloadURL();
+      _productModel.downloadImageUrl=dlUrl;
+      _productModel.imageName=imageName;
+      _productProvider.insertNewProduct(_productModel).then((_){
+
+        setState(() {
+          isSaving=false;
+        });
+        Navigator.pop(context);
+      });
+    }
+    catch(error){
+      setState(() {
+        isSaving=false;
+      });
+      showMessage(context, 'File not uploaded');
+      throw error;
+    }
+
 
   }
 }
